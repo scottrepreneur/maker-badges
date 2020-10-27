@@ -1,0 +1,13 @@
+  
+<script type="text/discourse-plugin" version="0.8">
+    console.log("Maker Badge Theme Component Running");
+</script>
+
+<script type="text/x-handlebars" data-template-name="/connectors/user-preferences-account/maker-badges">
+    <div class='control-label'>
+        Claim MakerDAO Badges
+    </div>
+    {{mount-widget widget="maker-badges-loader-widget"}}
+    <div id='badge-error' class='error-notice text-danger'></div>
+    <div id='badge-status' class='notice'></div>
+</script>

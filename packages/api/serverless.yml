@@ -1,0 +1,46 @@
+app: makerbadges
+service: metabadges-merkle-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: "*"
+
+package:
+  exclude:
+    - "**/*.ts"
+    - "test/**"
+    - "scripts/**"
+    - ".vscode/**"
+    - "*"
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+functions:
+  http:
+    handler: src/lambda.http
+    timeout: 15
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+    environment:
+      ENVIRONMENT: production
+      DYNAMODB_TABLE: ${env:DYNAMODB_TABLE}
+      MAKER_URL: ${env:MAKER_URL}
+      MAKER_USER: ${env:MAKER_USER}
+      MAKER_PW: ${env:MAKER_PW}
+      DISCOURSE_BADGES_API: ${env:DISCOURSE_BADGES_API}
+      DISCOURSE_API_USERNAME: ${env:DISCOURSE_API_USERNAME}
+      DISCOURSE_FORUM_URL: ${env:DISCOURSE_FORUM_URL}
+      DISCOURSE_USER_BADGES_URL: ${env:DISCOURSE_USER_BADGES_URL}
